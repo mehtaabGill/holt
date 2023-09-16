@@ -14,13 +14,34 @@
   },
   "homepage": "https://github.com/mehtaabGill/holt",
   "bugs": "https://github.com/mehtaabGill/holt/issues",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "require": "./dist/src/index.js",
+      "default": "./dist/src/index.js"
+    }
+  },
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "bun --watch ./src/index.ts",
     "test": "bun test",
-    "build": "rm -fr dist && tsc"
+    "build": "bun run ./build.ts",
+    "changed": "lerna changed",
+    "version": "lerna version --conventional-commits --exact --yes",
+    "publish": "bun run changed && bun run version && lerna publish from-git --no-verify-access --yes"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "lerna": "^7.3.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
