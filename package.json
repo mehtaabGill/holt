@@ -1,5 +1,5 @@
 {
-  "name": "@mehtaabgill/holt",
+  "name": "@tlscipher/holt",
   "version": "0.0.1",
   "description": "A highly configurable logger middleware for ElysiaJS.",
   "type": "module",
@@ -34,10 +34,7 @@
   "scripts": {
     "dev": "bun --watch ./src/index.ts",
     "test": "bun test",
-    "build": "rm -rf ./dist && bun run ./build.ts",
-    "changed": "lerna changed",
-    "version": "lerna version --conventional-commits --exact --yes",
-    "publish": "lerna changed && bun run version && lerna publish from-git --yes"
+    "build": "rm -rf ./dist && bun run ./build.ts"
   },
   "devDependencies": {
     "bun-types": "latest"
