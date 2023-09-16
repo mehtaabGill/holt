@@ -15,7 +15,7 @@ interface HeaderMatchPair {
 function defaultConfig(): HoltConfig {
   return {
     format:
-      ":date | :method :path - :status (:request-duration ms) | :header[user-agent]",
+      ":date | :method :path - :status (:request-duration ms)",
     colorful: true,
   };
 }
@@ -35,18 +35,21 @@ function extractHeaderKeysFromFormat(format: string): HeaderMatchPair[] {
     : [];
 }
 
-function getColorByConfig(config: HoltConfig, status?: number): Function {
-  return config.colorful && status
-    ? status >= 500
-      ? chalk.red
-      : status >= 400
-      ? chalk.yellow
-      : status >= 300
-      ? chalk.cyan
-      : status >= 200
-      ? chalk.green
-      : chalk.white
-    : chalk.white;
+function getColorByConfig(colorful: boolean = true, status?: number): Function {
+  if (!colorful || !status) return chalk.white;
+
+  switch (true) {
+    case status >= 500:
+      return chalk.red
+    case status >= 400:
+      return chalk.yellow
+    case status >= 300:
+      return chalk.cyan
+    case status >= 200:
+      return chalk.green
+      default:
+      return chalk.white;
+  }
 }
 
 export const loggerMiddleware = (config: HoltConfig = defaultConfig()) => {
@@ -74,7 +77,7 @@ export const loggerMiddleware = (config: HoltConfig = defaultConfig()) => {
         );
       }
 
-      const colorFn = getColorByConfig(config, set.status);
+      const colorFn = getColorByConfig(config.colorful, set.status);
 
       console.log(colorFn(message));
     });
