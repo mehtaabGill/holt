@@ -1,6 +1,5 @@
 import { Elysia } from "elysia";
 import chalk from "chalk";
-import process from "process";
 
 export interface HoltConfig {
   format: string;

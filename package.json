@@ -1,6 +1,6 @@
 {
   "name": "@tlscipher/holt",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A highly configurable logger middleware for ElysiaJS.",
   "type": "module",
   "author": {
@@ -13,6 +13,13 @@
     "url": "https://github.com/mehtaabGill/holt"
   },
   "private": false,
+  "keywords": [
+    "elysia",
+    "bun",
+    "logger",
+    "middleware",
+    "elysiaJS"
+  ],
   "homepage": "https://github.com/mehtaabGill/holt",
   "bugs": "https://github.com/mehtaabGill/holt/issues",
   "main": "./dist/src/index.js",
@@ -35,7 +42,8 @@
   "scripts": {
     "dev": "bun --watch ./src/index.ts",
     "test": "bun test",
-    "build": "rm -rf ./dist && bun run ./build.ts"
+    "build": "rm -rf ./dist && bun run ./build.ts",
+    "publish": "npm run publish --access=public"
   },
   "devDependencies": {
     "bun-types": "latest"
