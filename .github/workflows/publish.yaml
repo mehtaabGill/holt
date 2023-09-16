@@ -33,6 +33,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish Package
-        run: bun run publish
+        run: npm publish --access=public
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
