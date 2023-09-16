@@ -34,10 +34,10 @@ interface HoltConfig {
 }
 ```
 - `format` (Default: `":date | :method :path - :status (:request-duration ms)"`)
-    The `format` parameter allows you to customize the log output that is written to the console using tokens.
+    - The `format` parameter allows you to customize the log output that is written to the console using tokens.
 
 - `colorful` (Default: `true`)
-    The `colorful` parameter allows to specifiy a boolean value of wether or not you would like the logger output to be    color-coded based on the HTTP response status code.
+    - The `colorful` parameter allows to specifiy a boolean value of wether or not you would like the logger output to be    color-coded based on the HTTP response status code.
 
 ### Possible Tokens for Format
 - `:date` The time at which the response was sent.
