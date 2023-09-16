@@ -42,8 +42,7 @@
   "scripts": {
     "dev": "bun --watch ./src/index.ts",
     "test": "bun test",
-    "build": "rm -rf ./dist && bun run ./build.ts",
-    "publish": "npm publish --access=public"
+    "build": "rm -rf ./dist && bun run ./build.ts"
   },
   "devDependencies": {
     "bun-types": "latest"
