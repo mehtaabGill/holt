@@ -13,6 +13,13 @@
     "url": "https://github.com/mehtaabGill/holt"
   },
   "private": false,
+  "keywords": [
+    "elysia",
+    "bun",
+    "logger",
+    "middleware",
+    "elysiaJS"
+  ],
   "homepage": "https://github.com/mehtaabGill/holt",
   "bugs": "https://github.com/mehtaabGill/holt/issues",
   "main": "./dist/src/index.js",
