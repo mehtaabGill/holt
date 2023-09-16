@@ -1,6 +1,6 @@
 {
   "name": "@tlscipher/holt",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A highly configurable logger middleware for ElysiaJS.",
   "type": "module",
   "author": {
