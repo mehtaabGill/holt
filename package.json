@@ -12,6 +12,7 @@
     "type": "git",
     "url": "https://github.com/mehtaabGill/holt"
   },
+  "private": false,
   "homepage": "https://github.com/mehtaabGill/holt",
   "bugs": "https://github.com/mehtaabGill/holt/issues",
   "main": "./dist/src/index.js",
