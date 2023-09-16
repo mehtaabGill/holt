@@ -41,18 +41,19 @@ interface HoltConfig {
 
 ### Possible Tokens for Format
 - `:date` - The time at which the response was sent.
-    Example output: `2023-09-16T21:15:04.516Z`
+    - Example output: `2023-09-16T21:15:04.516Z`
 - `:method` - The HTTP method that was used for the inbound request.
-    Example output: `GET`
+    - Example output: `GET`
 - `:path` - The path of the inbound HTTP request
-    Example output: `/health`
+    - Example output: `/health`
 - `:request-duration` - The difference in milliseconds from the time the request was received, to the time the response was sent
+    - Example output:
 
 ### Adding Headers to the Format
 This package allows you to log any of the available incoming headers.
 - Format for header tokens:
 `:header[<header-key-here>]`
 - Examples:
-`:header[user-agent]` - Example Output: `PostmanRuntime/7.33.0`
-`:header[accept]` - Example Output: `application/json`
-`:header[authorization]` - Example Output: `Bearer auth_xxxxxx...`
+`:header[user-agent]` - Example output: `PostmanRuntime/7.33.0`
+`:header[accept]` - Example output: `application/json`
+`:header[authorization]` - Example output: `Bearer auth_xxxxxx...`
