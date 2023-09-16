@@ -43,7 +43,7 @@
     "dev": "bun --watch ./src/index.ts",
     "test": "bun test",
     "build": "rm -rf ./dist && bun run ./build.ts",
-    "publish": "npm run publish --access=public"
+    "publish": "npm publish --access=public"
   },
   "devDependencies": {
     "bun-types": "latest"
