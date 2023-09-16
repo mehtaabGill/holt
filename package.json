@@ -34,7 +34,7 @@
   "scripts": {
     "dev": "bun --watch ./src/index.ts",
     "test": "bun test",
-    "build": "bun run ./build.ts",
+    "build": "rm -rf ./dist && bun run ./build.ts",
     "changed": "lerna changed",
     "version": "lerna version --conventional-commits --exact --yes",
     "publish": "bun run changed && bun run version && lerna publish from-git --no-verify-access --yes"
