@@ -49,11 +49,15 @@ interface HoltConfig {
 - `:request-duration` - The difference in milliseconds from the time the request was received, to the time the response was sent
     - Example output:
 
-### Adding Headers to the Format
+## Adding Headers to the Format
 This package allows you to log any of the available incoming headers.
-- Format for header tokens:
-`:header[<header-key-here>]`
-- Examples:
-`:header[user-agent]` - Example output: `PostmanRuntime/7.33.0`
-`:header[accept]` - Example output: `application/json`
-`:header[authorization]` - Example output: `Bearer auth_xxxxxx...`
+#### Format for header tokens:
+- `:header[<header-key-here>]`
+
+### Examples:
+- `:header[user-agent]`
+    - Example output: `PostmanRuntime/7.33.0`
+- `:header[accept]`
+    - Example output: `application/json`
+- `:header[authorization]`
+    - Example output: `Bearer auth_xxxxxx...`
