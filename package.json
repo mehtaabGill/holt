@@ -39,6 +39,9 @@
     "version": "lerna version --conventional-commits --exact --yes",
     "publish": "bun run changed && bun run version && lerna publish from-git --no-verify-access --yes"
   },
+  "workspaces": [
+    "."
+  ],
   "devDependencies": {
     "bun-types": "latest",
     "lerna": "^7.3.0"
