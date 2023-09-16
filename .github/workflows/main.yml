@@ -1,0 +1,38 @@
+name: Deploy Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Bun Environment
+        uses: oven-sh/setup-bun@v1
+
+      - name: Setup NPM
+        uses: actions/setup-node@v3
+
+      - name: Install Dependancies
+        run: bun install
+
+      - name: Build Package
+        run: bun run build
+
+      - name: Authenticate With NPM
+        run: |
+          echo "@tlscipher:registry=https://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          npm whoami
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish Package
+        run: bun run publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
