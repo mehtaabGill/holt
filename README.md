@@ -40,13 +40,13 @@ interface HoltConfig {
     The `colorful` parameter allows to specifiy a boolean value of wether or not you would like the logger output to be    color-coded based on the HTTP response status code.
 
 ### Possible Tokens for Format
-- `:date` - The time at which the response was sent.
+- `:date` The time at which the response was sent.
     - Example output: `2023-09-16T21:15:04.516Z`
-- `:method` - The HTTP method that was used for the inbound request.
+- `:method` The HTTP method that was used for the inbound request.
     - Example output: `GET`
-- `:path` - The path of the inbound HTTP request
+- `:path` The path of the inbound HTTP request
     - Example output: `/health`
-- `:request-duration` - The difference in milliseconds from the time the request was received, to the time the response was sent
+- `:request-duration` The difference in milliseconds from the time the request was received, to the time the response was sent
     - Example output:
 
 ## Adding Headers to the Format
