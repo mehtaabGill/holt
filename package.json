@@ -37,14 +37,10 @@
     "build": "rm -rf ./dist && bun run ./build.ts",
     "changed": "lerna changed",
     "version": "lerna version --conventional-commits --exact --yes",
-    "publish": "lerna publish from-git --yes"
+    "publish": "lerna changed && bun run version && lerna publish from-git --yes"
   },
-  "workspaces": [
-    "."
-  ],
   "devDependencies": {
-    "bun-types": "latest",
-    "lerna": "^7.3.0"
+    "bun-types": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
