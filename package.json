@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "bun --watch ./src/index.ts",
     "test": "bun test",
-    "build": "rm -fr dist && tsc"
+    "build": "bun run ./build.ts"
   },
   "devDependencies": {
     "bun-types": "latest"
