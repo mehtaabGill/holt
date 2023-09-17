@@ -47,3 +47,9 @@ jobs:
         run: npm publish --access=public
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish Github Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.event.inputs.release_tag }}
+          makeLatest: "true"
