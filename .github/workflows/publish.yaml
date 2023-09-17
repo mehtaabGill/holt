@@ -56,3 +56,4 @@ jobs:
         with:
           tag: ${{ github.event.inputs.release_tag }}
           makeLatest: "true"
+          token: ${{ secrets.GH_TOKEN }}
