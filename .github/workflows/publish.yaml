@@ -21,6 +21,9 @@ jobs:
       - name: Install Dependancies
         run: bun install
 
+      - name: Bump Version
+        run: npm version ${{ github.event.release.tag_name }}
+
       - name: Build Package
         run: bun run build
 
