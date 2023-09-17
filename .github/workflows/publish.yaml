@@ -26,11 +26,14 @@ jobs:
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
+      - name: Bump Version
+        uses: reedyuk/npm-version@1.1.1
+        with:
+          version: ${{ github.event.inputs.release_tag }}
+          git-tag-version: 'true'
+
       - name: Install Dependancies
         run: bun install
-
-      - name: Bump Version
-        run: npm version ${{ github.event.inputs.release_tag }}
 
       - name: Build Package
         run: bun run build
