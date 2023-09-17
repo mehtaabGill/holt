@@ -1,5 +1,5 @@
 import { Elysia } from "elysia";
-import chalk from "chalk";
+import chalk, { ChalkInstance } from "chalk";
 
 export interface HoltConfig {
   format: string;
@@ -11,11 +11,16 @@ interface HeaderMatchPair {
   headerKey: string;
 }
 
-function defaultConfig(): HoltConfig {
+const DEFAULT_FORMAT = ":date | :method :path - :status (:request-duration ms)";
+
+function configFromPartial(partialConfig: Partial<HoltConfig>): HoltConfig {
+  const colorful = partialConfig.colorful === undefined ? true : false;
+  const format =
+    partialConfig.format === undefined ? DEFAULT_FORMAT : partialConfig.format;
+
   return {
-    format:
-      ":date | :method :path - :status (:request-duration ms)",
-    colorful: true,
+    format,
+    colorful,
   };
 }
 
@@ -34,24 +39,24 @@ function extractHeaderKeysFromFormat(format: string): HeaderMatchPair[] {
     : [];
 }
 
-function getColorByConfig(colorful: boolean = true, status?: number): Function {
-  if (!colorful || !status) return chalk.white;
-
+function getColorByConfig(status: number): ChalkInstance {
   switch (true) {
     case status >= 500:
-      return chalk.red
+      return chalk.red;
     case status >= 400:
-      return chalk.yellow
+      return chalk.yellow;
     case status >= 300:
-      return chalk.cyan
+      return chalk.cyan;
     case status >= 200:
-      return chalk.green
-      default:
+      return chalk.green;
+    default:
       return chalk.white;
   }
 }
 
-export const loggerMiddleware = (config: HoltConfig = defaultConfig()) => {
+export const loggerMiddleware = (partialConfig: Partial<HoltConfig> = {}) => {
+  const config = configFromPartial(partialConfig);
+
   return new Elysia({ name: "holt" })
     .derive(async () => {
       return {
@@ -67,7 +72,10 @@ export const loggerMiddleware = (config: HoltConfig = defaultConfig()) => {
           ":status",
           set.status ? set.status.toString() : "<unknown status>"
         )
-        .replaceAll(":request-duration", `${Date.now() - _holtRequestStartTime}`);
+        .replaceAll(
+          ":request-duration",
+          `${Date.now() - _holtRequestStartTime}`
+        );
 
       for (const headerPair of extractHeaderKeysFromFormat(config.format)) {
         message = message.replaceAll(
@@ -76,8 +84,11 @@ export const loggerMiddleware = (config: HoltConfig = defaultConfig()) => {
         );
       }
 
-      const colorFn = getColorByConfig(config.colorful, set.status);
-
-      console.log(colorFn(message));
+      if (!config.colorful || !set.status) {
+        console.log(message);
+      } else {
+        const colorFn = getColorByConfig(set.status);
+        console.log(colorFn(message));
+      }
     });
 };
