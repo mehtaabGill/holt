@@ -1,8 +1,11 @@
 name: Publish Package
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release Tag"
+        required: true
 
 jobs:
   deploy:
@@ -27,7 +30,7 @@ jobs:
         run: bun install
 
       - name: Bump Version
-        run: npm version ${{ github.event.release.tag_name }}
+        run: npm version ${{ github.event.inputs.release_tag }}
 
       - name: Build Package
         run: bun run build
