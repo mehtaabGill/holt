@@ -61,7 +61,7 @@ This package allows you to log any of the available incoming headers.
     - Example output: `Bearer auth_xxxxxx...`
 
 ## Custom Tokens
-You can now add custom tokens to your logger using the `HoltConfig.token` function. The function accepts the following parameters:
+You can now add custom tokens to your logger using the `HoltLogger.token` function. The function accepts the following parameters:
 - `token` (required string)
     - The string to be tokenized and used and the replacer in the format
 - `extractFn` (required function)
@@ -75,9 +75,9 @@ import { Elysia } from "elysia";
 new Elysia()
   .use(
     new HoltLogger({
-      format: ":method :path | :is-cached",
+      format: ":method :path | :is-admin",
     })
-      .token("is-cached", ({ headers }) => {
+      .token("is-admin", ({ headers }) => {
         return headers["x-admin-api-key"] === "admin-api-key-here"
           ? "Admin Request"
           : "User Request";
