@@ -6,10 +6,10 @@ new Elysia()
     new HoltLogger({
       format: ":method :path | :is-cached",
     })
-      .token("is-cached", (ctx) => {
-        return ctx.query["cache"] === "1"
-          ? "Cached Request"
-          : "Un-cached Request";
+      .token("is-cached", ({ headers }) => {
+        return headers["x-admin-api-key"] === "admin-api-key-here"
+          ? "Admin Request"
+          : "User Request";
       })
       .getLogger()
   )

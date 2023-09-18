@@ -1,6 +1,13 @@
 import { Context, Elysia, TypedRoute } from "elysia";
 import chalk, { ChalkInstance } from "chalk";
 
+type ExtractFn = (
+  context: Pick<
+    Context<TypedRoute, {}>,
+    "request" | "headers" | "body" | "path" | "set"
+  >
+) => string;
+
 export interface HoltConfig {
   format: string;
   colorful: boolean;
@@ -13,7 +20,7 @@ export interface HeaderMatchPair {
 
 export interface CustomToken {
   token: string;
-  extractFn: (context: Context<TypedRoute, {}>) => string;
+  extractFn: ExtractFn;
 }
 
 export class HoltLogger {
@@ -32,24 +39,30 @@ export class HoltLogger {
           _holtRequestStartTime: Date.now(),
         };
       })
-      .onAfterHandle((ctx) => {
+      .onAfterHandle(({ request, headers, path, body, set, _holtRequestStartTime }) => {
         let message = this.config.format
           .replaceAll(":date", new Date().toISOString())
-          .replaceAll(":method", ctx.request.method)
-          .replaceAll(":path", ctx.path)
+          .replaceAll(":method", request.method)
+          .replaceAll(":path", path)
           .replaceAll(
             ":status",
-            ctx.set.status ? ctx.set.status.toString() : "<unknown status>"
+            set.status ? set.status.toString() : "<unknown status>"
           )
           .replaceAll(
             ":request-duration",
-            `${Date.now() - ctx._holtRequestStartTime}`
+            `${Date.now() - _holtRequestStartTime}`
           );
 
         for (const token of this.tokens) {
           message = message.replaceAll(
             HoltLogger.tokenize(token.token),
-            token.extractFn(ctx)
+            token.extractFn({
+              request,
+              headers,
+              set,
+              path,
+              body
+            })
           );
         }
 
@@ -58,24 +71,24 @@ export class HoltLogger {
         )) {
           message = message.replaceAll(
             headerPair.rawMatch,
-            ctx.request.headers.get(headerPair.headerKey) ?? "-"
+            request.headers.get(headerPair.headerKey) ?? "-"
           );
         }
 
-        if (!this.config.colorful || !ctx.set.status) {
+        if (!this.config.colorful || !set.status) {
           console.log(message);
         } else {
-          const colorFn = HoltLogger.getColorByConfig(ctx.set.status);
+          const colorFn = HoltLogger.getColorByConfig(set.status);
           console.log(colorFn(message));
         }
       });
   }
 
-  public token(token: string, extractFn: (context: Context<TypedRoute, {}>) => string) {
+  public token(token: string, extractFn: ExtractFn) {
     this.tokens.push({
       token,
-      extractFn
-    })
+      extractFn,
+    });
 
     return this;
   }
