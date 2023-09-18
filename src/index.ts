@@ -24,7 +24,7 @@ export interface CustomToken {
 }
 
 export class HoltLogger {
-  private static readonly DEFAULT_FORMAT: ":date | :method :path - :status (:request-duration ms)";
+  private static readonly DEFAULT_FORMAT = ":date | :method :path - :status (:request-duration ms)";
   private config: HoltConfig;
   private tokens: CustomToken[] = [];
 
