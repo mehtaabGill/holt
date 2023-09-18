@@ -6,7 +6,6 @@ A highly configurable logger middleware for [ElysiaJS](https://elysiajs.com).
 
 ![Demo Image](https://media.discordapp.net/attachments/1128513990776066139/1153344988978094161/image.png?width=1062&height=162)
 
-## **Version 1.0.0 and higher of this package require you to be on version 0.6.24 or greater for ElysiaJS**
 ## Installation
 ```bash
 bun add @tlscipher/holt
