@@ -86,7 +86,7 @@ export class HoltLogger {
       );
   }
 
-  public token(token: string, extractFn: ExtractFn) {
+  public token(token: string, extractFn: ExtractFn): HoltLogger {
     this.tokens.push({
       token,
       extractFn,
@@ -95,7 +95,7 @@ export class HoltLogger {
     return this;
   }
 
-  private static tokenize(token: string) {
+  private static tokenize(token: string): string {
     return `:${token}`;
   }
 
