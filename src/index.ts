@@ -33,7 +33,8 @@ export class HoltLogger {
   }
 
   public getLogger() {
-    return new Elysia({ name: "holt" })
+    return (app: Elysia) => {
+      return new Elysia({ name: "holt" })
       .derive(async () => {
         return {
           _holtRequestStartTime: Date.now(),
@@ -84,6 +85,7 @@ export class HoltLogger {
           }
         }
       );
+    }
   }
 
   public token(token: string, extractFn: ExtractFn): HoltLogger {
