@@ -1,0 +1,21 @@
+name: Build Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Bun Environment
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install Dependancies
+        run: bun install
+
+      - name: Build Package
+        run: bun run build
