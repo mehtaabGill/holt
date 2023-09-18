@@ -5,10 +5,12 @@ A highly configurable logger middleware for [ElysiaJS](https://elysiajs.com).
 > Named after [Raymond Holt](https://en.wikipedia.org/wiki/List_of_Brooklyn_Nine-Nine_characters#Raymond_Holt) from Brooklyn Nine-Nine
 
 ![Demo Image](https://media.discordapp.net/attachments/1128513990776066139/1153344988978094161/image.png?width=1062&height=162)
+
 ## Installation
 ```bash
 bun add @tlscipher/holt
 ```
+
 
 ## Usage
 ```ts
@@ -61,7 +63,7 @@ This package allows you to log any of the available incoming headers.
     - Example output: `Bearer auth_xxxxxx...`
 
 ## Custom Tokens
-You can now add custom tokens to your logger using the `HoltConfig.token` function. The function accepts the following parameters:
+You can now add custom tokens to your logger using the `HoltLogger.token` function. The function accepts the following parameters:
 - `token` (required string)
     - The string to be tokenized and used and the replacer in the format
 - `extractFn` (required function)
@@ -75,9 +77,9 @@ import { Elysia } from "elysia";
 new Elysia()
   .use(
     new HoltLogger({
-      format: ":method :path | :is-cached",
+      format: ":method :path | :is-admin",
     })
-      .token("is-cached", ({ headers }) => {
+      .token("is-admin", ({ headers }) => {
         return headers["x-admin-api-key"] === "admin-api-key-here"
           ? "Admin Request"
           : "User Request";
