@@ -18,7 +18,9 @@
     "bun",
     "logger",
     "middleware",
-    "elysiaJS"
+    "elysiaJS",
+    "holt",
+    "tlscipher"
   ],
   "homepage": "https://github.com/mehtaabGill/holt",
   "bugs": "https://github.com/mehtaabGill/holt/issues",
