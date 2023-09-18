@@ -3,6 +3,8 @@
 A highly configurable logger middleware for [ElysiaJS](https://elysiajs.com).
 
 > Named after [Raymond Holt](https://en.wikipedia.org/wiki/List_of_Brooklyn_Nine-Nine_characters#Raymond_Holt) from Brooklyn Nine-Nine
+
+![Demo Image](https://media.discordapp.net/attachments/1128513990776066139/1153344988978094161/image.png?width=1062&height=162)
 ## Installation
 ```bash
 bun add @tlscipher/holt
@@ -10,23 +12,19 @@ bun add @tlscipher/holt
 
 ## Usage
 ```ts
+import { HoltLogger } from "@tlscipher/holt";
 import { Elysia } from "elysia";
-import { loggerMiddleware } from '@tlscipher/holt';
 
-const app = new Elysia()
-    .use(loggerMiddleware())
-    .get('/health', () => {
-        return {
-            healthy: true
-        }
-    })
-    .listen(3000)
+new Elysia()
+  .use(new HoltLogger().getLogger())
+  .get("/", () => {})
+  .listen(3000);
 ```
 
 ## Configuration
 
-### HoltConfig
-The `loggerMiddleware` function accepts an optional parameter of type `HoltConfig`.
+### HoltLogger
+The constructor for `HoltLogger` function accepts an optional parameter of type `HoltConfig`.
 ```ts
 interface HoltConfig {
   format: string;
@@ -61,3 +59,31 @@ This package allows you to log any of the available incoming headers.
     - Example output: `application/json`
 - `:header[authorization]`
     - Example output: `Bearer auth_xxxxxx...`
+
+## Custom Tokens
+You can now add custom tokens to your logger using the `HoltConfig.token` function. The function accepts the following parameters:
+- `token` (required string)
+    - The string to be tokenized and used and the replacer in the format
+- `extractFn` (required function)
+    - The function will be given access to select properties of ELysia's context and must return the string value to replace the token in the format.
+
+### Example Custom Token Usage
+```ts
+import { HoltLogger } from "@tlscipher/holt";
+import { Elysia } from "elysia";
+
+new Elysia()
+  .use(
+    new HoltLogger({
+      format: ":method :path | :is-cached",
+    })
+      .token("is-cached", ({ headers }) => {
+        return headers["x-admin-api-key"] === "admin-api-key-here"
+          ? "Admin Request"
+          : "User Request";
+      })
+      .getLogger()
+  )
+  .get("/", () => {})
+  .listen(3000);
+```
