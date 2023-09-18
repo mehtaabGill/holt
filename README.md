@@ -1,13 +1,10 @@
 # @tlscipher/holt
 
-[![NPM Version][https://badgen.net/npm/v/@tlscipher/holt]][https://www.npmjs.com/package/@tlscipher/holt]
-[![NPM Downloads][https://badgen.net/npm/dm/@tlscipher/holt]][https://www.npmjs.com/package/@tlscipher/holt]
-
 A highly configurable logger middleware for [ElysiaJS](https://elysiajs.com).
 
 > Named after [Raymond Holt](https://en.wikipedia.org/wiki/List_of_Brooklyn_Nine-Nine_characters#Raymond_Holt) from Brooklyn Nine-Nine
 
-![Demo Image][https://media.discordapp.net/attachments/1128513990776066139/1153344988978094161/image.png?width=1062&height=162]
+![Demo Image](https://media.discordapp.net/attachments/1128513990776066139/1153344988978094161/image.png?width=1062&height=162)
 ## Installation
 ```bash
 bun add @tlscipher/holt
