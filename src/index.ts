@@ -39,49 +39,51 @@ export class HoltLogger {
           _holtRequestStartTime: Date.now(),
         };
       })
-      .onAfterHandle(({ request, headers, path, body, set, _holtRequestStartTime }) => {
-        let message = this.config.format
-          .replaceAll(":date", new Date().toISOString())
-          .replaceAll(":method", request.method)
-          .replaceAll(":path", path)
-          .replaceAll(
-            ":status",
-            set.status ? set.status.toString() : "<unknown status>"
-          )
-          .replaceAll(
-            ":request-duration",
-            `${Date.now() - _holtRequestStartTime}`
-          );
+      .onAfterHandle(
+        ({ request, headers, path, body, set, _holtRequestStartTime }) => {
+          let message = this.config.format
+            .replaceAll(":date", new Date().toISOString())
+            .replaceAll(":method", request.method)
+            .replaceAll(":path", path)
+            .replaceAll(
+              ":status",
+              set.status ? set.status.toString() : "<unknown status>"
+            )
+            .replaceAll(
+              ":request-duration",
+              `${Date.now() - _holtRequestStartTime}`
+            );
 
-        for (const token of this.tokens) {
-          message = message.replaceAll(
-            HoltLogger.tokenize(token.token),
-            token.extractFn({
-              request,
-              headers,
-              set,
-              path,
-              body
-            })
-          );
-        }
+          for (const token of this.tokens) {
+            message = message.replaceAll(
+              HoltLogger.tokenize(token.token),
+              token.extractFn({
+                request,
+                headers,
+                set,
+                path,
+                body,
+              })
+            );
+          }
 
-        for (const headerPair of HoltLogger.extractHeaderKeysFromFormat(
-          this.config.format
-        )) {
-          message = message.replaceAll(
-            headerPair.rawMatch,
-            request.headers.get(headerPair.headerKey) ?? "-"
-          );
-        }
+          for (const headerPair of HoltLogger.extractHeaderKeysFromFormat(
+            this.config.format
+          )) {
+            message = message.replaceAll(
+              headerPair.rawMatch,
+              request.headers.get(headerPair.headerKey) ?? "-"
+            );
+          }
 
-        if (!this.config.colorful || !set.status) {
-          console.log(message);
-        } else {
-          const colorFn = HoltLogger.getColorByConfig(set.status);
-          console.log(colorFn(message));
+          if (!this.config.colorful || !set.status) {
+            console.log(message);
+          } else {
+            const colorFn = HoltLogger.getColorByConfig(set.status);
+            console.log(colorFn(message));
+          }
         }
-      });
+      );
   }
 
   public token(token: string, extractFn: ExtractFn) {
