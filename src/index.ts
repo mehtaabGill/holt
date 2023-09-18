@@ -1,19 +1,25 @@
-import { AfterRequestHandler, Elysia } from "elysia";
+import { Context, Elysia, TypedRoute } from "elysia";
 import chalk, { ChalkInstance } from "chalk";
 
-interface HoltConfig {
+export interface HoltConfig {
   format: string;
   colorful: boolean;
 }
 
-interface HeaderMatchPair {
+export interface HeaderMatchPair {
   rawMatch: string;
   headerKey: string;
 }
 
+export interface CustomToken {
+  token: string;
+  extractFn: (context: Context<TypedRoute, {}>) => string;
+}
+
 export class HoltLogger {
-  private config: HoltConfig;
   private static readonly DEFAULT_FORMAT: ":date | :method :path - :status (:request-duration ms)";
+  private config: HoltConfig;
+  private tokens: CustomToken[] = [];
 
   constructor(partialConfig: Partial<HoltConfig> = {}) {
     this.config = HoltLogger.configFromPartial(partialConfig);
@@ -21,39 +27,61 @@ export class HoltLogger {
 
   public getLogger() {
     return new Elysia({ name: "holt" })
-    .derive(async () => {
-      return {
-        _holtRequestStartTime: Date.now(),
-      };
-    })
-    .onAfterHandle(({ request, path, set, _holtRequestStartTime }) => {
-      let message = this.config.format
-        .replaceAll(":date", new Date().toISOString())
-        .replaceAll(":method", request.method)
-        .replaceAll(":path", path)
-        .replaceAll(
-          ":status",
-          set.status ? set.status.toString() : "<unknown status>"
-        )
-        .replaceAll(
-          ":request-duration",
-          `${Date.now() - _holtRequestStartTime}`
-        );
+      .derive(async () => {
+        return {
+          _holtRequestStartTime: Date.now(),
+        };
+      })
+      .onAfterHandle((ctx) => {
+        let message = this.config.format
+          .replaceAll(":date", new Date().toISOString())
+          .replaceAll(":method", ctx.request.method)
+          .replaceAll(":path", ctx.path)
+          .replaceAll(
+            ":status",
+            ctx.set.status ? ctx.set.status.toString() : "<unknown status>"
+          )
+          .replaceAll(
+            ":request-duration",
+            `${Date.now() - ctx._holtRequestStartTime}`
+          );
 
-      for (const headerPair of HoltLogger.extractHeaderKeysFromFormat(this.config.format)) {
-        message = message.replaceAll(
-          headerPair.rawMatch,
-          request.headers.get(headerPair.headerKey) ?? "-"
-        );
-      }
+        for (const token of this.tokens) {
+          message = message.replaceAll(
+            HoltLogger.tokenize(token.token),
+            token.extractFn(ctx)
+          );
+        }
 
-      if (!this.config.colorful || !set.status) {
-        console.log(message);
-      } else {
-        const colorFn = HoltLogger.getColorByConfig(set.status);
-        console.log(colorFn(message));
-      }
+        for (const headerPair of HoltLogger.extractHeaderKeysFromFormat(
+          this.config.format
+        )) {
+          message = message.replaceAll(
+            headerPair.rawMatch,
+            ctx.request.headers.get(headerPair.headerKey) ?? "-"
+          );
+        }
+
+        if (!this.config.colorful || !ctx.set.status) {
+          console.log(message);
+        } else {
+          const colorFn = HoltLogger.getColorByConfig(ctx.set.status);
+          console.log(colorFn(message));
+        }
+      });
+  }
+
+  public token(token: string, extractFn: (context: Context<TypedRoute, {}>) => string) {
+    this.tokens.push({
+      token,
+      extractFn
     })
+
+    return this;
+  }
+
+  private static tokenize(token: string) {
+    return `:${token}`;
   }
 
   private static configFromPartial(
