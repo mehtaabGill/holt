@@ -10,6 +10,8 @@ A highly configurable logger middleware for [ElysiaJS](https://elysiajs.com).
 bun add @tlscipher/holt
 ```
 
+## Version 1.0.0 and higher of this package require you to be on version 0.6.24 or greater for ElysiaJS
+
 ## Usage
 ```ts
 import { HoltLogger } from "@tlscipher/holt";
