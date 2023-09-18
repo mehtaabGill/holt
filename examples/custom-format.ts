@@ -1,7 +1,12 @@
-import { loggerMiddleware } from "../src/index";
+import { HoltLogger } from "../src/index";
 import { Elysia } from "elysia";
 
 new Elysia()
-  .use(loggerMiddleware({ format: 'Request Method: :method | Request Path: :path | Response Status: :status | User Agent: :header[user-agent]' }))
+  .use(
+    new HoltLogger({
+      format:
+        "Request Method: :method | Request Path: :path | Response Status: :status | User Agent: :header[user-agent]",
+    }).getLogger()
+  )
   .get("/", () => {})
   .listen(3000);

@@ -1,7 +1,7 @@
-import { loggerMiddleware } from "../src/index";
+import { HoltLogger } from "../src/index";
 import { Elysia } from "elysia";
 
 new Elysia()
-  .use(loggerMiddleware({ colorful: false }))
+  .use(new HoltLogger({ colorful: false }).getLogger())
   .get("/", () => {})
   .listen(3000);
