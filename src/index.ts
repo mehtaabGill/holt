@@ -24,7 +24,8 @@ export interface CustomToken {
 }
 
 export class HoltLogger {
-  private static readonly DEFAULT_FORMAT = ":date | :method :path - :status (:request-duration ms)";
+  private static readonly DEFAULT_FORMAT =
+    ":date | :method :path - :status (:request-duration ms)";
   private config: HoltConfig;
   private tokens: CustomToken[] = [];
 
@@ -33,8 +34,7 @@ export class HoltLogger {
   }
 
   public getLogger() {
-    return (app: Elysia) => {
-      return new Elysia({ name: "holt" })
+    return new Elysia({ name: "@tlscipher/holt" })
       .derive(async () => {
         return {
           _holtRequestStartTime: Date.now(),
@@ -85,7 +85,6 @@ export class HoltLogger {
           }
         }
       );
-    }
   }
 
   public token(token: string, extractFn: ExtractFn): HoltLogger {
