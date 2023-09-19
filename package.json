@@ -47,13 +47,14 @@
     "build": "rm -rf ./dist && bun run ./build.ts"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "elysia": "^0.6.19"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "elysia": ">= 0.6.19"
   },
   "dependencies": {
-    "chalk": "^5.3.0",
-    "elysia": ">=0.6.24"
+    "chalk": "^5.3.0"
   }
 }
