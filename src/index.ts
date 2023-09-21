@@ -1,11 +1,9 @@
-import { Context, Elysia, TypedRoute } from "elysia";
+import { Context, Elysia } from "elysia";
+import { HTTPStatusName, StatusMap } from "elysia/utils";
 import chalk, { ChalkInstance } from "chalk";
 
 type ExtractFn = (
-  context: Pick<
-    Context<TypedRoute, {}>,
-    "request" | "headers" | "body" | "path" | "set"
-  >
+  context: Pick<Context, "request" | "headers" | "body" | "path" | "set">
 ) => string;
 
 export interface HoltConfig {
@@ -25,7 +23,7 @@ export interface CustomToken {
 
 export class HoltLogger {
   private static readonly DEFAULT_FORMAT =
-    ":date | :method :path - :status (:request-duration ms)";
+    ":dateUTC | :method :path - :status (:request-duration ms)";
   private config: HoltConfig;
   private tokens: CustomToken[] = [];
 
@@ -40,51 +38,49 @@ export class HoltLogger {
           _holtRequestStartTime: Date.now(),
         };
       })
-      .onAfterHandle(
-        ({ request, headers, path, body, set, _holtRequestStartTime }) => {
-          let message = this.config.format
-            .replaceAll(":date", new Date().toISOString())
-            .replaceAll(":method", request.method)
-            .replaceAll(":path", path)
-            .replaceAll(
-              ":status",
-              set.status ? set.status.toString() : "<unknown status>"
-            )
-            .replaceAll(
-              ":request-duration",
-              `${Date.now() - _holtRequestStartTime}`
-            );
+      .onResponse(({ request, set, path, headers, body, _holtRequestStartTime }) => {
+        let message = this.config.format
+          .replaceAll(":date", new Date().toISOString())
+          .replaceAll(":method", request.method)
+          .replaceAll(":path", path)
+          .replaceAll(
+            ":status",
+            set.status ? set.status.toString() : "<unknown status>"
+          )
+          .replaceAll(
+            ":request-duration",
+            `${Date.now() - _holtRequestStartTime}`
+          );
 
-          for (const token of this.tokens) {
-            message = message.replaceAll(
-              HoltLogger.tokenize(token.token),
-              token.extractFn({
-                request,
-                headers,
-                set,
-                path,
-                body,
-              })
-            );
-          }
-
-          for (const headerPair of HoltLogger.extractHeaderKeysFromFormat(
-            this.config.format
-          )) {
-            message = message.replaceAll(
-              headerPair.rawMatch,
-              request.headers.get(headerPair.headerKey) ?? "-"
-            );
-          }
-
-          if (!this.config.colorful || !set.status) {
-            console.log(message);
-          } else {
-            const colorFn = HoltLogger.getColorByConfig(set.status);
-            console.log(colorFn(message));
-          }
+        for (const token of this.tokens) {
+          message = message.replaceAll(
+            HoltLogger.tokenize(token.token),
+            token.extractFn({
+              request,
+              headers,
+              set,
+              path,
+              body,
+            })
+          );
         }
-      );
+
+        for (const headerPair of HoltLogger.extractHeaderKeysFromFormat(
+          this.config.format
+        )) {
+          message = message.replaceAll(
+            headerPair.rawMatch,
+            request.headers.get(headerPair.headerKey) ?? "-"
+          );
+        }
+
+        if (!this.config.colorful || !set.status) {
+          console.log(message);
+        } else {
+          const colorFn = HoltLogger.getColorByConfig(set.status);
+          console.log(colorFn(message));
+        }
+      });
   }
 
   public token(token: string, extractFn: ExtractFn): HoltLogger {
@@ -132,15 +128,18 @@ export class HoltLogger {
       : [];
   }
 
-  private static getColorByConfig(status: number): ChalkInstance {
+  private static getColorByConfig(
+    status: number | HTTPStatusName
+  ): ChalkInstance {
+    const intStatus = typeof status === "number" ? status : StatusMap[status];
     switch (true) {
-      case status >= 500:
+      case intStatus >= 500:
         return chalk.red;
-      case status >= 400:
+      case intStatus >= 400:
         return chalk.yellow;
-      case status >= 300:
+      case intStatus >= 300:
         return chalk.cyan;
-      case status >= 200:
+      case intStatus >= 200:
         return chalk.green;
       default:
         return chalk.white;
