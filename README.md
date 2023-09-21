@@ -47,7 +47,7 @@ interface HoltConfig {
 - `:path` The path of the inbound HTTP request
     - Example output: `/health`
 - `:request-duration` The difference in milliseconds from the time the request was received, to the time the response was sent
-    - Example output:
+    - Example output: `4.28`
 
 ## Adding Headers to the Format
 This package allows you to log any of the available incoming headers.
