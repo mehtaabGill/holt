@@ -4,7 +4,7 @@ A highly configurable logger middleware for [ElysiaJS](https://elysiajs.com).
 
 > Named after [Raymond Holt](https://en.wikipedia.org/wiki/List_of_Brooklyn_Nine-Nine_characters#Raymond_Holt) from Brooklyn Nine-Nine
 
-![Demo Image](https://media.discordapp.net/attachments/1128513990776066139/1153344988978094161/image.png?width=1062&height=162)
+![Demo Image](https://media.discordapp.net/attachments/1165434623988346910/1225669053725540402/image.png?ex=6621f842&is=660f8342&hm=5703cb4f7611629cbd3ce45604f3edece3d36d7fc329f6450255e33e29e0124b&=&format=webp&quality=lossless&width=1131&height=241)
 
 ## Installation
 ```bash
