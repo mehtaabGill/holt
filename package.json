@@ -1,6 +1,6 @@
 {
   "name": "@tlscipher/holt",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "A highly configurable logger middleware for ElysiaJS.",
   "type": "module",
   "author": {
@@ -50,11 +50,11 @@
     "bun-types": "latest"
   },
   "peerDependencies": {
-    "elysia": "0.8.3",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "elysia": "^1.0.10"
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "elysia": "0.8.3"
+    "elysia": "^1.0.10"
   }
 }
