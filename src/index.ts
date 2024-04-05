@@ -1,6 +1,7 @@
-import { Context, Elysia } from "elysia";
-import { HTTPStatusName, StatusMap } from "elysia/utils";
-import chalk, { ChalkInstance } from "chalk";
+ import { Context } from "elysia";
+ import chalk, { ChalkInstance } from "chalk";
+import { Elysia } from "elysia";
+import { StatusMap } from "./types";
 
 type ExtractFn = (
   context: Pick<Context, "request" | "headers" | "body" | "path" | "set">
@@ -33,12 +34,12 @@ export class HoltLogger {
 
   public getLogger() {
     return new Elysia({ name: "@tlscipher/holt" })
-      .derive(async () => {
+      .derive({ as: 'global' }, async () => {
         return {
           _holtRequestStartTime: Date.now(),
         };
       })
-      .onResponse(({ request, set, path, headers, body, _holtRequestStartTime }) => {
+      .onResponse({ as: 'global' }, ({ request, set, path, headers, body, _holtRequestStartTime }) => {
         let message = this.config.format
           .replaceAll(":date", new Date().toISOString())
           .replaceAll(":method", request.method)
@@ -129,7 +130,7 @@ export class HoltLogger {
   }
 
   private static getColorByConfig(
-    status: number | HTTPStatusName
+    status: number | keyof typeof StatusMap
   ): ChalkInstance {
     const intStatus = typeof status === "number" ? status : StatusMap[status];
     switch (true) {
