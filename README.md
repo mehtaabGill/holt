@@ -4,7 +4,7 @@ A highly configurable logger middleware for [ElysiaJS](https://elysiajs.com).
 
 > Named after [Raymond Holt](https://en.wikipedia.org/wiki/List_of_Brooklyn_Nine-Nine_characters#Raymond_Holt) from Brooklyn Nine-Nine
 
-![Demo Image](https://github.com/user-attachments/assets/e64ba363-dfce-42d3-bd9a-7d3d120c6e91)
+![Demo Image](https://pub-d84f256fb1f945169a0e7623d3e414c1.r2.dev/uploads/377299818-e64ba363-dfce-42d3-bd9a-7d3d120c6e91.png)
 
 
 ## Installation
